@@ -34,5 +34,5 @@ end
 figure(1)
 clf
 plot(t,neuronVoltage)
-title('Neuron without leak current ')
+title('Neuron With Injected Current (w/out Leak Current) ')
 
