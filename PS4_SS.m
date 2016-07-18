@@ -37,3 +37,5 @@ end
 figure(1)
 clf
 plot(t,neuronVoltage)
+
+%% HAHAHAHA
