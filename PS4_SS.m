@@ -9,7 +9,7 @@ t=0:dt:10;  %Time in seconds- 10 secs
 neuronVoltage=zeros(size(t));  %Creates vector that stores the mV of time
 restingV=-70; %-70 mV is resting potential 
 threshold=-55; % Threshold- Where action potential stimulated
-spikeAmp=50 %spikes to 50 mV 
+spikeAmp=50; %spikes to 50 mV 
 for i=2:length(t)  %Goes through the length of time, starts at 2 so can do (i-1)
      if neuronVoltage(i)>threshold && neuronVoltage(i)<spikeAmp  %if reached threshold and less than 50
          neuronVoltage(i)=spikeAmp;  %go to spike
@@ -42,7 +42,7 @@ ylabel('mV')
 % 3) Leak Current to be biologically realistic **********
 % Sherry
 t=0:dt:50;  %Time in seconds- runs for 50 secs
-neuronVoltage=zeros(size(t)) %resetting the voltage vector to all 0
+neuronVoltage=zeros(size(t)); %resetting the voltage vector to all 0
 neuronVoltage(1)=restingV; %setting the first value to resting potential
 for i=2:length(t)  %for every time value, starts at 2 so can do (i-1) 
     leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler equation
@@ -55,7 +55,7 @@ for i=2:length(t)  %for every time value, starts at 2 so can do (i-1)
         %less than 40 takes into consideration of leak current
         neuronVoltage(i)=50; %the spike (the overshoot) 
     %Falling back to rest
-    elseif neuronVoltage(i) >40  % if greater than 40 (for the leak) current goes back to resting
+    elseif neuronVoltage(i) > 40  % if greater than 40 (for the leak) current goes back to resting
         neuronVoltage(i)= restingV; %resets to resting
     end
 end
@@ -204,7 +204,7 @@ for i=2:length(t)  %for every time value, from 2 for (i-1)
     end
     %For the second neuron spike
     if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40 %If reached threshold, less than 40 (for leak), make neuron spike
-        neuronVoltage2(i)=50; %spikes 
+        neuronVoltage2(i)=spikeAmp; %spikes 
     elseif neuronVoltage2(i)>40  %if over the spikeAmp (40 for leak)goes back to resting 
         neuronVoltage2(i)=restingV;  %Goes back to resting 
     end
