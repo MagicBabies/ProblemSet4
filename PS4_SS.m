@@ -154,45 +154,88 @@ plot(t,neuronVoltage)
 title('Neuron Without Injected Current (with Leak Current and noise without injected current A=10)')
 % It can't generate any spike with the help of injected current, when A=10
 
-%% Two IF Neurons 
+
+ %% Two IF Neurons 
+
 % 1) Excitatory Input on a second neuron 
+
 clear all 
 dt=.01;
-t=0:dt:2;  %runs for 50 seconds 
-injectedCurrent = 15  %Injected Current is 15 mV 
+
+t=0:dt:20;%runs for 50 seconds 
+
+injectedCurrent = 15*dt;  %Injected Current is 15 mV 
+
 restingV=-70; %-70 mV is resting potential 
+
 threshold=-55; % Threshold- Where action potential stimulted
-spikeAmp=50 %spikes to 50 mV
+
+spikeAmp=50; %spikes to 50 mV
+
+ 
 
 neuronVoltage2= zeros(size(t)); % Stores voltage of a second neuron for 50 secs
-neuronVoltage = zeros(size(t)); %Increases the size of the first neuron to 50 secs. 
-neuronVoltage(1)=restingV;
-neuronVoltage2(1)=restingV;
-for i=2:length(t)-1  %for every time value
-    neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent; %First neuron still gets injected current
-    if neuronVoltage(i)>threshold && neuronVoltage(i)<50  %If reached threshold, make neuron spike
-        neuronVoltage(i)=50; %the spike (the overshoot) 
-        neuronVoltage2(i) = neuronVoltage2(i-1) + 5; %If first spike, mV of second Neuron increases by 5
-    else
-            neuronVoltage2(i) = neuronVoltage2(i-1); % if the 1st Neuron doesn't fire, the second neuron simply inherits its charge from before
-    end    
-    %Falling phase of 1st Neuron 
-    if neuronVoltage(i) >50  %if over the spikeAmp, leak current decay back
-        neuronVoltage(i)= restingV;
-    end
-    %IF's for the second neuron
-    if neuronVoltage2(i)>threshold && neuronVoltage2(i)<50 %If second neuron hits threshold, fire
-        neuronVoltage2(i)=50; 
-    end
-    if neuronVoltage2(i) >= 50 %if over the spikeAmp, leak current decay back 
-        neuronVoltage(i+1)=restingV; 
-    end
-    
-    
-end
-figure(4) 
 
+neuronVoltage = zeros(size(t)); %Increases the size of the first neuron to 50 secs. 
+
+neuronVoltage(1)=restingV;
+
+neuronVoltage2(1)=restingV;
+
+for i=2:length(t)  %for every time value
+
+   leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler 
+
+ 
+
+    neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
+
+    if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
+
+        neuronVoltage(i)=50; %the spike (the overshoot) 
+
+        neuronVoltage2(i) = neuronVoltage2(i-1) + 5; %If first spike, mV of second Neuron increases by 5
+
+    else
+
+       neuronVoltage2(i) = neuronVoltage2(i-1); % if the 1st Neuron doesn't fire, the second neuron simply inherits its charge from before
+
+        if neuronVoltage(i) >40  %if over the spikeAmp, leak current decay back
+
+        neuronVoltage(i)= restingV;
+
+        end
+
+    end
+
+    
+
+     if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40
+
+        neuronVoltage2(i)=50;
+
+    elseif neuronVoltage2(i)>40
+
+        neuronVoltage2(i)=restingV;
+
+    end
+
+ 
+
+end
+figure(5) 
+clf
 plot(t,neuronVoltage)
 hold on
 plot(t,neuronVoltage2)
 legend('1st' , '2nd') 
+title('Excitatory input on a second neuron')
+
+
+
+
+
+ 
+
+
+
