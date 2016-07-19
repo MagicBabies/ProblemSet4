@@ -179,7 +179,7 @@ for i=2:length(t)  %for every time value
     leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
     neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
     leakCurrent=((neuronVoltage2(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
-    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent; %First neuron still gets injected current
+    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent;
     
     if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
         neuronVoltage(i)=50; %the spike (the overshoot)
@@ -233,7 +233,7 @@ for i=2:length(t)  %for every time value
     leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
     neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
     leakCurrent=((neuronVoltage2(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
-    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent; %First neuron still gets injected current
+    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent;
     
     if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
         neuronVoltage(i)=50; %the spike (the overshoot)
