@@ -297,7 +297,8 @@ legend('1st' , '2nd')
 title('Excitatory input on a second neuron')
 
 
- %% Facilitation and Depression
+%% Extra Credit: Facilitation and Depression
+ 
 % 1) Modeling Facilitation
 clear all
 
@@ -353,3 +354,55 @@ hold on
 plot(t,neuronVoltage2)
 legend('1st' , '2nd') 
 title('Excitatory input on a second neuron')
+
+% 2) Modeling Depression 
+clear all 
+dt=.01
+t=0:dt:50%runs for 50 seconds 
+injectedCurrent = 15*dt  %Injected Current is 15 mV 
+restingV=-70; %-70 mV is resting potential 
+threshold=-55; % Threshold- Where action potential stimulted
+spikeAmp=50 %spikes to 50 mV
+
+neuronVoltage2= zeros(size(t)); % Stores voltage of a second neuron for 50 secs
+neuronVoltage = zeros(size(t)); %Increases the size of the first neuron to 50 secs. 
+neuronVoltage(1)=restingV;
+neuronVoltage2(1)=restingV;
+strength=10  %Completely arbitrary value, picked an initial Strength to increase by
+for i=2:length(t)  %for every time value
+   leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler 
+   neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
+   leakCurrent2=((neuronVoltage2(i-1)-restingV)*dt)/10;
+   neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent;
+    if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
+        neuronVoltage(i)=50; %the spike (the overshoot) 
+      
+        strength=strength*.9
+        neuronVoltage2(i) = neuronVoltage2(i-1) + (strength) ; %If first spike, mV of second Neuron increases by 5
+    else
+       neuronVoltage2(i) = neuronVoltage2(i-1); % if the 1st Neuron doesn't fire, the second neuron simply inherits its charge from before
+        if neuronVoltage(i) >40  %if over the spikeAmp, leak current decay back
+        neuronVoltage(i)= restingV;
+        end
+    end
+    
+     if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40
+        neuronVoltage2(i)=50;
+    elseif neuronVoltage2(i)>40
+        neuronVoltage2(i)=restingV;
+    end
+
+end
+figure(3) 
+clf
+plot(t,neuronVoltage)
+hold on
+plot(t,neuronVoltage2)
+legend('1st' , '2nd') 
+title('Extra Credit Two, Depression Synapse')
+
+
+
+
+
+
