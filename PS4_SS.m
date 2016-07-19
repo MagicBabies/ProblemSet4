@@ -355,6 +355,8 @@ plot(t,neuronVoltage)
 hold on
 plot(t,neuronVoltage2)
 legend('1st' , '2nd') 
+xlabel('time')
+ylabel('neuronVoltage')
 title('Excitatory input on a second neuron')
 
 % 2) Modeling Depression 
