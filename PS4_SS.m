@@ -11,7 +11,7 @@ restingV=-70; %-70 mV is resting potential
 threshold=-55; % Threshold- Where action potential stimulated
 spikeAmp=50 %spikes to 50 mV 
 for i=2:length(t)  %Goes through the length of time, starts at 2 so can do (i-1)
-     if neuronVoltage(i)>threshold && neuronVoltage(i)<50  %if reached threshold and less than 50
+     if neuronVoltage(i)>threshold && neuronVoltage(i)<spikeAmp  %if reached threshold and less than 50
          neuronVoltage(i)=spikeAmp;  %go to spike
      end
      if neuronVoltage(i)>50  %if greater than 50, meaning already spiked, go to resting 
@@ -82,7 +82,7 @@ for i=2:length(t)  %for every time value
     if i<500%make the the neuron lose the injected current
     neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent+randn*A*dt; %increases mV from resting by injected current and increase a random voltage due to the noise
     else 
-    neuronVoltage(i)=neuronVoltage(i-1)-leakCurrent; %increases mV from resting by injected current
+    neuronVoltage(i)=neuronVoltage(i-1)-leakCurrent+randn*A*dt; %increases mV from resting by injected current
     end
     if neuronVoltage(i)>threshold && neuronVoltage(i)<spikeAmp  %If reached threshold, make neuron spike
         neuronVoltage(i)=spikeAmp; %the spike (the overshoot) 
@@ -94,11 +94,11 @@ for i=2:length(t)  %for every time value
 end
 figure(3)
 plot(t,neuronVoltage)
-title('Neuron With Injected Current (with Leak Current and Noise with injected current) ')
-xlabel('Time') 
-ylabel('mV')
 
-% Without any injected current A=100
+xlabel('time')
+ylabel('neuronVoltage')
+title('Neuron With Injected Current (with Leak Current and noise with injected current) ')
+% without any injected current A=100
 clear all 
 dt=.01;  %increment
 t=0:dt:50;  %Time in seconds- 10 secs
@@ -125,13 +125,12 @@ for i=2:length(t)  %for every time value
 end
 figure(4)
 plot(t,neuronVoltage)
-title('Neuron Without Injected Current (with Leak Current and Noise without injected current A=100)')
-xlabel('Time') 
-ylabel('mV')
 
-%***It can generate spikes without the help of injected current when A=100
-
-%Without any injected current A=10
+xlabel('time')
+ylabel('neuronVoltage')
+title('Neuron Without Injected Current (with Leak Current and noise without injected current A=100)')
+%It can generate spikes without the help of injected current when A =100
+% without any injected current A=10
 clear all 
 dt=.01;  %increment
 t=0:dt:50;  %Time in seconds- 10 secs
@@ -158,6 +157,8 @@ for i=2:length(t)  %for every time value
 end
 figure(5)
 plot(t,neuronVoltage)
+xlabel('time')
+ylabel('neuronVoltage')
 title('Neuron Without Injected Current (with Leak Current and noise without injected current A=10)')
 xlabel('Time') 
 ylabel('mV')
@@ -216,7 +217,9 @@ title('Excitatory input on a second neuron')
 xlabel('Time') 
 ylabel('mV')
 
-% 2) Adjusting firing rate **********
+
+% 2) Adjusting firing rate  **********
+
 % Mostly copied from 2.1. Partially written by Li Zehua.
 
 % The ratio of spikes in neuron 1 to neuron 2 equals merely 4.
@@ -225,31 +228,31 @@ ylabel('mV')
 
 clear all
 
-dt=.01;
-t=0:dt:49997; %runs for 49997 seconds
+dt = .01;
+t = 0:dt:49997; %runs for 49997 seconds
 
 injectedCurrent = 15*dt;  %Injected Current is 15 mV 
-restingV=-70; %-70 mV is resting potential
-threshold=-55; % Threshold- Where action potential stimulted
-spikeAmp=50; %spikes to 50 mV
+restingV = -70; %-70 mV is resting potential
+threshold = -55; % Threshold- Where action potential stimulted
+spikeAmp = 50; %spikes to 50 mV
 
-neuronVoltage2= zeros(size(t)); % Stores voltage of a second neuron for 50 secs
-neuronVoltage = zeros(size(t)); %Increases the size of the first neuron to 50 secs. 
+neuronVoltage2 = zeros(size(t)); % Stores voltage of a second neuron for 50 secs
+neuronVoltage = zeros(size(t)); % Increases the size of the first neuron to 50 secs. 
 
-neuronVoltage(1)=restingV;
-neuronVoltage2(1)=restingV;
+neuronVoltage(1) = restingV;
+neuronVoltage2(1) = restingV; % Initialize the neurons' voltage to resting voltage.
 
 count = zeros(1, 2); % Initialize the vector to store how many time neurons spike.
 
-for i=2:length(t)  %for every time value
-    leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
-    neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
-    leakCurrent=((neuronVoltage2(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
-    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent;
+for i = 2 : length(t)  %for every time value
+    leakCurrent = ((neuronVoltage(i-1) - restingV) * dt) / 10; % defining the leak current value based on euler
+    neuronVoltage(i) = neuronVoltage(i-1) + injectedCurrent - leakCurrent; % First neuron still gets injected current
+    leakCurrent = ((neuronVoltage2(i-1) - restingV) * dt) / 10; % defining the leak current value based on euler
+    neuronVoltage2(i) = neuronVoltage2(i-1) - leakCurrent; % Second neuron's current is leaking.
     
-    if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
-        neuronVoltage(i)=50; %the spike (the overshoot)
-        count(1) = count(1) + 1;
+    if neuronVoltage(i) > threshold && neuronVoltage(i) < 40  %If reached threshold, make neuron spike
+        neuronVoltage(i) = spikeAmp; %the spike (the overshoot)
+        count(1) = count(1) + 1; % Count for the first neuron.
         neuronVoltage2(i) = neuronVoltage2(i-1) + 5; %If first spike, mV of second Neuron increases by 5
     else
         neuronVoltage2(i) = neuronVoltage2(i-1); % if the 1st Neuron doesn't fire, the second neuron simply inherits its charge from before
@@ -257,15 +260,16 @@ for i=2:length(t)  %for every time value
             neuronVoltage(i)= restingV;
         end
     end
-    if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40
-        neuronVoltage2(i)=50;
+    % Repeat merely the same steps as above except some unnecessary steps.
+    if neuronVoltage2(i) > threshold && neuronVoltage2(i) < 40
+        neuronVoltage2(i) = spikeAmp;
         count(2) = count(2) + 1;
-    elseif neuronVoltage2(i)>40
-        neuronVoltage2(i)=restingV;
+    elseif neuronVoltage2(i) > 40
+        neuronVoltage2(i) = restingV;
     end
 end
 
-ratio = count(1) / count(2); % The ratio of spikes in neuron 1 to neuron 2.
+ratio = count(1) / count(2) % The ratio of spikes in neuron 1 to neuron 2.
 
 % 3) Increase the rate of fire **********
 clear all 
@@ -286,7 +290,7 @@ for i=2:length(t)  %for every time value
     leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler method
     neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
     if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
-        neuronVoltage(i)=50; %the spike (the overshoot)
+        neuronVoltage(i)=spikeAmp; %the spike (the overshoot)
         neuronVoltage2(i) = neuronVoltage2(i-1)+2; %If first spike, mV of second Neuron increases by 2
     else
         neuronVoltage2(i) = neuronVoltage2(i-1); % if the 1st Neuron doesn't fire, the second neuron simply inherits its charge from before
@@ -295,7 +299,7 @@ for i=2:length(t)  %for every time value
         end
     end
     if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40
-        neuronVoltage2(i)=50;    
+        neuronVoltage2(i)=spikeAmp;    
     elseif neuronVoltage2(i)>40
         neuronVoltage2(i)=restingV;
     end
@@ -311,30 +315,31 @@ xlabel('Time')
 ylabel('mV')
 
 %% Extra Credit: Facilitation and Depression
- 
-% 1) Modeling Facilitation **********
+
+% 1) Modeling Facilitation  **********
+% Mainly copied from 2.1. Partially written by Li Zehua.
 clear all
 
-dt=.01;
-t=0:dt:50; %runs for 50 seconds
+dt = .01;
+t = 0:dt:50; %runs for 50 seconds
 
-injectedCurrent = 20*dt;  %Injected Current is 20 mV 
-restingV=-70; %-70 mV is resting potential
-threshold=-55; % Threshold- Where action potential stimulted
-spikeAmp=50; %spikes to 50 mV
-calcium=0; % To store the amount of calcium, initialize the variable calcium to 0.
+injectedCurrent = 20*dt; % Injected Current is 20 mV 
+restingV = -70; % -70 mV is resting potential
+threshold = -55; % Threshold- Where action potential stimulted
+spikeAmp = 50; % Spikes to 50 mV
+calcium = 0; % To store the amount of calcium, initialize the variable calcium to 0.
 
-neuronVoltage2= zeros(size(t)); % Stores voltage of a second neuron for 50 secs
-neuronVoltage = zeros(size(t)); %Increases the size of the first neuron to 50 secs. 
+neuronVoltage2 = zeros(size(t)); % Stores voltage of a second neuron for 50 secs
+neuronVoltage = zeros(size(t)); % Increases the size of the first neuron to 50 secs. 
 
-neuronVoltage(1)=restingV;
-neuronVoltage2(1)=restingV;
+neuronVoltage(1) = restingV;
+neuronVoltage2(1) = restingV; % Initialize the neurons' voltage to resting voltage.
 
-for i=2:length(t)  %for every time value
-    leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
-    neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
-    leakCurrent=((neuronVoltage2(i-1)-restingV)*dt)/10; %defining the leak current value based on euler
-    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent;
+for i = 2:length(t)  % For every time value
+    leakCurrent = ((neuronVoltage(i-1) - restingV) * dt) / 10; % Defining the leak current value based on euler
+    neuronVoltage(i) = neuronVoltage(i-1) + injectedCurrent - leakCurrent; % First neuron still gets injected current
+    leakCurrent = ((neuronVoltage2(i-1) - restingV) * dt) / 10; % Defining the leak current value based on euler
+    neuronVoltage2(i) = neuronVoltage2(i-1) - leakCurrent; % Second neuron's current is leaking.
     
     % Calcium looply decline.
     deltaCalcium = - calcium * dt / 10; % Calculate the delta of calcium.
@@ -344,8 +349,8 @@ for i=2:length(t)  %for every time value
         calcium = 0;
     end
     
-    if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
-        neuronVoltage(i)=50; %the spike (the overshoot)
+    if neuronVoltage(i) > threshold && neuronVoltage(i) < 40  %If reached threshold, make neuron spike
+        neuronVoltage(i) = spikeAmp; %the spike (the overshoot)
         calcium = calcium + 1; % If neuron 1 spikes, add 1 to calcium.
         neuronVoltage2(i) = neuronVoltage2(i-1) + 2 * calcium; %If first spike, mV of second Neuron increases by 5
     else
@@ -354,10 +359,11 @@ for i=2:length(t)  %for every time value
             neuronVoltage(i)= restingV;
         end
     end
-    if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40
-        neuronVoltage2(i)=50;
-    elseif neuronVoltage2(i)>40
-        neuronVoltage2(i)=restingV;
+    % Repeat merely the same steps as above except some unnecessary steps.
+    if neuronVoltage2(i) > threshold && neuronVoltage2(i) < 40
+        neuronVoltage2(i) = spikeAmp;
+    elseif neuronVoltage2(i) > 40
+        neuronVoltage2(i) = restingV;
     end
 end
 figure(8) 
@@ -366,6 +372,8 @@ plot(t,neuronVoltage)
 hold on
 plot(t,neuronVoltage2)
 legend('1st' , '2nd') 
+xlabel('time')
+ylabel('neuronVoltage')
 title('Excitatory input on a second neuron')
 xlabel('Time') 
 ylabel('mV')
@@ -373,26 +381,26 @@ ylabel('mV')
 % 2) Modeling Depression **********
 % Sherry Shi 
 clear all 
-dt=.01  %Time interval increment 
-t=0:dt:50%runs for 50 seconds 
-injectedCurrent = 15*dt  %Injected Current is 15 mV 
+dt=.01;  %Time interval increment 
+t=0:dt:50; %runs for 50 seconds
+injectedCurrent = 15*dt;  %Injected Current is 15 mV 
 restingV=-70; %-70 mV is resting potential 
 threshold=-55; % Threshold- Where action potential stimulted
-spikeAmp=50 %spikes to 50 mV
+spikeAmp=50; %spikes to 50 mV
 
 neuronVoltage2= zeros(size(t)); % Stores voltage of a second neuron for 50 secs
 neuronVoltage = zeros(size(t)); %Stores voltage of the first neuron for 50 secs. 
 neuronVoltage(1)=restingV;  %Sets first value of first neuron to resting potential 
 neuronVoltage2(1)=restingV; %Sets first value of second neuron to resting potential
-strength=10  %Completely arbitrary value, picked an initial Strength to increase by
+strength=10;  %Completely arbitrary value, picked an initial Strength to increase by
 for i=2:length(t)  %for every time value, starts at 2 to do (i-1)
    leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current of 1st value based on euler equation
    neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
    leakCurrent2=((neuronVoltage2(i-1)-restingV)*dt)/10; %defining the leak current of 2nd value based on euler equation
    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent; %Second neuron no injected current, depends on the first, but has leak current 
     if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike, 40 for leak
-        neuronVoltage(i)=50; %the spike (the overshoot) 
-        strength=strength*.9  %Strength of impact on second neuron decreased by 10% 
+        neuronVoltage(i)=spikeAmp; %the spike (the overshoot) 
+        strength=strength*.9;  %Strength of impact on second neuron decreased by 10% 
         neuronVoltage2(i) = neuronVoltage2(i-1) + (strength) ; %If first spike, mV of second Neuron increases whatever strength is
         %over time, strength should decrease
         %Vesicle variable isn't included bc assuming each spikes is -10%
@@ -404,10 +412,10 @@ for i=2:length(t)  %for every time value, starts at 2 to do (i-1)
         end 
     end
     %For the spikes of the 2nd neuron 
-     if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40  %If reached threshold, make neuron spike, 40 for leak
-        neuronVoltage2(i)=50; %spikes
-    elseif neuronVoltage2(i)>40 %If over spikeAmp, 40 for leak, go back to resting 
-        neuronVoltage2(i)=restingV; %returns to resting 
+     if neuronVoltage2(i)>threshold && neuronVoltage2(i)<40
+        neuronVoltage2(i)=spikeAmp;
+    elseif neuronVoltage2(i)>40
+        neuronVoltage2(i)=restingV;
     end
 
 end
@@ -420,9 +428,3 @@ legend('1st' , '2nd')
 title('Extra Credit 2: Depression Synapse')
 xlabel('Time') 
 ylabel('mV')
-
-
-
-
-
-
