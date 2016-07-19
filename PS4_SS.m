@@ -281,10 +281,10 @@ for i=2:length(t)  %for every time value
     neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent;
     
     % Calcium looply decline.
-    deltaCalcium = - calcium * dt / 10;
-    if calcium + deltaCalcium >= 0
+    deltaCalcium = - calcium * dt / 10; % Calculate the delta of calcium.
+    if calcium + deltaCalcium >= 0 % If still bigger than or equal to 0, calcium plus delta. 
         calcium = calcium + deltaCalcium;
-    else
+    else % If not, calcium equals 0.
         calcium = 0;
     end
     
