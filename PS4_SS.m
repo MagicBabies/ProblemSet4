@@ -356,8 +356,6 @@ legend('1st' , '2nd')
 title('Excitatory input on a second neuron')
 
 % 2) Modeling Depression 
-
-
 clear all 
 dt=.01
 t=0:dt:50%runs for 50 seconds 
@@ -370,7 +368,7 @@ neuronVoltage2= zeros(size(t)); % Stores voltage of a second neuron for 50 secs
 neuronVoltage = zeros(size(t)); %Increases the size of the first neuron to 50 secs. 
 neuronVoltage(1)=restingV;
 neuronVoltage2(1)=restingV;
-strength=10
+strength=10  %Completely arbitrary value, picked an initial Strength to increase by
 for i=2:length(t)  %for every time value
    leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler 
    neuronVoltage(i)=neuronVoltage(i-1)+injectedCurrent-leakCurrent; %First neuron still gets injected current
