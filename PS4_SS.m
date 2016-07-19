@@ -1,7 +1,7 @@
 %% Section1: Integrate and Fire Neuron
 
 % 1)Creating an Integrate and Fire Neuron **********
-
+% Sherry
 
 dt=.01;  %interval of time, increment by .01 
 t=0:dt:10;  %Time in seconds- 10 secs
@@ -19,6 +19,7 @@ for i=2:length(t)  %Goes through the length of time, starts at 2 so can do (i-1)
      end
 end
 % 2) Adding a Stimulus **********
+% Sherry
 injectedCurrent=15*dt; %The neuron's voltage will increase by 15mV/sec; times dt to add the right amount to each interval
 neuronVoltage(1)=restingV; %setting the first value to resting potential
 for i=2:length(t)  %for every time value
@@ -67,6 +68,7 @@ ylabel('mV')
 
 % 4)Add noise **********
 %   - With injected current
+% Chen Xinhang
 clear all 
 dt=.01;  %increment
 t=0:dt:50;  %Time in seconds- 10 secs
@@ -272,6 +274,7 @@ end
 ratio = count(1) / count(2) % The ratio of spikes in neuron 1 to neuron 2.
 
 % 3) Increase the rate of fire **********
+% Chen Xinhang
 clear all 
 dt=.01;
 t=0:dt:50;%runs for 50 seconds 
@@ -379,7 +382,7 @@ xlabel('Time')
 ylabel('mV')
 
 % 2) Modeling Depression **********
-% Sherry Shi 
+% Sherry Shi
 clear all 
 dt=.01;  %Time interval increment 
 t=0:dt:50; %runs for 50 seconds
