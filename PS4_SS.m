@@ -297,7 +297,8 @@ legend('1st' , '2nd')
 title('Excitatory input on a second neuron')
 
 
- %% Facilitation and Depression
+%% Extra Credit: Facilitation and Depression
+ 
 % 1) Modeling Facilitation
 clear all
 
@@ -353,8 +354,8 @@ hold on
 plot(t,neuronVoltage2)
 legend('1st' , '2nd') 
 title('Excitatory input on a second neuron')
-%% Extra Credit 
- %2) Extra Credit: Modeling Depression 
+
+% 2) Modeling Depression 
 
 
 clear all 
@@ -369,7 +370,6 @@ neuronVoltage2= zeros(size(t)); % Stores voltage of a second neuron for 50 secs
 neuronVoltage = zeros(size(t)); %Increases the size of the first neuron to 50 secs. 
 neuronVoltage(1)=restingV;
 neuronVoltage2(1)=restingV;
-vesicles=100
 strength=10
 for i=2:length(t)  %for every time value
    leakCurrent=((neuronVoltage(i-1)-restingV)*dt)/10; %defining the leak current value based on euler 
@@ -378,7 +378,7 @@ for i=2:length(t)  %for every time value
    neuronVoltage2(i)=neuronVoltage2(i-1)-leakCurrent;
     if neuronVoltage(i)>threshold && neuronVoltage(i)<40  %If reached threshold, make neuron spike
         neuronVoltage(i)=50; %the spike (the overshoot) 
-        vesicles=vesicles*(.9) 
+      
         strength=strength*.9
         neuronVoltage2(i) = neuronVoltage2(i-1) + (strength) ; %If first spike, mV of second Neuron increases by 5
     else
